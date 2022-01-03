@@ -15,8 +15,8 @@ function App() {
   // const query = '';
   const [query, setQuery] = useState<string>('');
   const [showPeople, setShowPeople] = useState<boolean>(false);
-  const [widgetSortProperty, setWidgetSortProperty] = useState<IProperty<IWidget>>({ property: 'title' });
-  const [peopleSortProperty, setPeopleSortProperty] = useState<IProperty<IPerson>>({ property: 'lastName' });
+  const [widgetSortProperty, setWidgetSortProperty] = useState<IProperty<IWidget>>({ property: 'title', isDescending: true });
+  const [peopleSortProperty, setPeopleSortProperty] = useState<IProperty<IPerson>>({ property: 'lastName', isDescending: true });
   const buttonText = showPeople ? 'Show Widgets' : 'Show People';
   return (
     <>
@@ -29,8 +29,8 @@ function App() {
         <>
           <h2>Widgets:</h2>
           <Sorters
-            setProperty={(property) =>
-              setWidgetSortProperty({ property })
+            setProperty={(propertyType) =>
+              setWidgetSortProperty(propertyType)
             }
             object={widgets[0]}
           />
@@ -38,7 +38,7 @@ function App() {
             .filter((widget => genericSearch(widget, ['title', 'description'], query, false))
             )
             .sort((a, b) =>
-              genericSort(a, b, widgetSortProperty.property)
+              genericSort(a, b, widgetSortProperty)
             )
             .map(widget => {
               return (
@@ -50,14 +50,14 @@ function App() {
       {showPeople && (
         <>
           <h2>People:</h2>
-          <Sorters setProperty={(property) =>
-            setPeopleSortProperty({ property })
+          <Sorters setProperty={(propertyType) =>
+            setPeopleSortProperty(propertyType)
           } object={people[0]} />
           {people
             .filter((person => genericSearch(person, ['firstName', 'lastName', 'eyeColor'], query, false))
             )
             .sort((a, b) =>
-              genericSort(a, b, peopleSortProperty.property)
+              genericSort(a, b, peopleSortProperty)
             )
             .map(person => {
               return (
